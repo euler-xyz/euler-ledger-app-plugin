@@ -1,0 +1,32 @@
+{
+    "chainId": 1,
+    "contracts": [
+        {
+            "address": "0x3520d5a913427e6f0d6a83e07ccd4a4da316e4d3",
+            "contractName": "Euler Markets",
+            "selectors": {
+                "0x4e807177": {
+                    "erc20OfInterest": [
+                        "underlying"
+                    ],
+                    "method": "activateMarket",
+                    "plugin": "Euler"
+		        }
+	        }
+	    },
+        {
+            "address": "0x59828fdf7ee634aaad3f58b19fdba3b03e2d9d80",
+            "contractName": "Euler Exec",
+            "selectors": {
+                "0xeb937aeb": {
+                    "erc20OfInterest": [
+                        "items.0.proxyAddr"
+                    ],
+                    "method": "batchDispatch",
+                    "plugin": "Euler"
+		        }
+	        }
+	    }
+    ],
+    "name": "Euler"
+}

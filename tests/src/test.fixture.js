@@ -27,20 +27,19 @@ const NANOS_PLUGIN_PATH = Resolve('elfs/plugin_nanos.elf');
 const NANOSP_PLUGIN_PATH = Resolve('elfs/plugin_nanosp.elf');
 const NANOX_PLUGIN_PATH = Resolve('elfs/plugin_nanox.elf');
 
-const nano_models: DeviceModel[] = [
+const nano_models = [
     { name: 'nanos', letter: 'S', path: NANOS_PLUGIN_PATH, eth_path: NANOS_ETH_PATH },
     { name: 'nanosp', letter: 'SP', path: NANOSP_PLUGIN_PATH, eth_path: NANOSP_ETH_PATH },
     { name: 'nanox', letter: 'X', path: NANOX_PLUGIN_PATH, eth_path: NANOX_ETH_PATH }
 ];
 
-
-const boilerplateJSON = generate_plugin_config();
+const pluginConfigJSON = generate_plugin_config();
 
 const SPECULOS_ADDRESS = '0xFE984369CE3919AA7BB4F431082D027B4F8ED70C';
 const RANDOM_ADDRESS = '0xaaaabbbbccccddddeeeeffffgggghhhhiiiijjjj'
 
 
-let genericTx = {
+const genericTx = {
     nonce: Number(0),
     gasLimit: Number(21000),
     gasPrice: parseUnits('1', 'gwei'),
@@ -87,8 +86,7 @@ function zemu(device, func) {
         let elf_path;
         let lib_elf;
         elf_path = device.eth_path;
-        // Edit this: replace `Boilerplate` by your plugin name
-        lib_elf = { 'Boilerplate': device.path };
+        lib_elf = { 'Euler': device.path };
 
         const sim = new Zemu(elf_path, lib_elf);
         try {
@@ -97,7 +95,7 @@ function zemu(device, func) {
             const eth = new Eth(transport);
             eth.setLoadConfig({
                 baseURL: null,
-                extraPlugins: boilerplateJSON,
+                extraPlugins: pluginConfigJSON,
             });
             await func(sim, eth);
         } finally {
