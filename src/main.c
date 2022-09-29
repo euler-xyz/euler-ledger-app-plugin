@@ -22,19 +22,26 @@
 #include "os.h"
 #include "cx.h"
 
-#include "boilerplate_plugin.h"
+#include "euler_plugin.h"
 
-// List of selectors supported by this plugin.
-// EDIT THIS: Adapt the variable names and change the `0x` values to match your selectors.
-static const uint32_t SWAP_EXACT_ETH_FOR_TOKENS_SELECTOR = 0x7ff36ab5;
-static const uint32_t BOILERPLATE_DUMMY_SELECTOR_2 = 0x13374242;
-
-// Array of all the different boilerplate selectors. Make sure this follows the same order as the
-// enum defined in `boilerplate_plugin.h`
-// EDIT THIS: Use the names of the array declared above.
-const uint32_t BOILERPLATE_SELECTORS[NUM_SELECTORS] = {
-    SWAP_EXACT_ETH_FOR_TOKENS_SELECTOR,
-    BOILERPLATE_DUMMY_SELECTOR_2,
+const uint32_t EULER_SELECTORS[NUM_SELECTORS] = {
+    ACTIVATE_MARKET_SELECTOR,
+    BATCH_DISPATCH_SELECTOR,
+    ENTER_MARKET_SELECTOR,
+    EXIT_MARKET_SELECTOR,
+    USE_PERMIT_SELECTOR,
+    USE_PERMIT_ALLOWED_SELECTOR,
+    USE_PERMIT_PACKED_SELECTOR,
+    DEPOSIT_SELECTOR,
+    WITHDRAW_SELECTOR,
+    BORROW_SELECTOR,
+    REPAY_SELECTOR,
+    MINT_SELECTOR,
+    BURN_SELECTOR,
+    TRANSFER_SELECTOR,
+    TRANSFER_FROM_SELECTOR,
+    SWAP_SELECTOR,
+    SWAP_AND_REPAY_SELECTOR
 };
 
 // Function to dispatch calls from the ethereum app.
@@ -73,7 +80,7 @@ void call_app_ethereum() {
     os_lib_call((unsigned int *) &libcall_params);
 }
 
-// Weird low-level black magic. No need to edit this.
+// Weird low-level black magic
 __attribute__((section(".boot"))) int main(int arg0) {
     // Exit critical section
     __asm volatile("cpsie i");

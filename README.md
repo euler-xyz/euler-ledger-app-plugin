@@ -1,32 +1,33 @@
-# app-plugin-boilerplate
+# Euler Ledger App Plugin
 
-This repo is a meant to be a forkable example of a plugin.
+This repository implements Ledger App Plugin for Euler which allows Ledger devices to display user friendly transaction summary for the most common Euler interactions, instead of blind signing.
 
-Plugins are lightweight applications that go hand-in-hand with the Ethereum
-Application on a Nano S / X device.
+[Euler](https://app.euler.finance/) is a non-custiodial permissionless lending protocol on Ethereum network.
 
-They allow users to safely interact with smart contracts by parsing the
-transaction data and displaying its content in a human readable way. This is
-done on a "per contract" basis, meaning a plugin is required for every DApp.
+# Documentation
 
-The code has been commented, and special "EDIT THIS" comments indicate where
-developers are expected to adapt the code to their own needs.
+For more information refer to the official Ledger [documenation](https://developers.ledger.com/docs/dapp/nano-plugin/overview/). 
 
-It is STRONGLY recommended to follow the
-[plugin guide](https://developers.ledger.com/docs/dapp/nano-plugin/overview/)
-in order to better understand the flow and the context for plugins.
+# Tests
 
-## Ethereum SDK
-
-Ethereum plugins need the [Ethereum SDK](https://github.com/LedgerHQ/ethereum-plugin-sdk).
-You can use the `ETHEREUM_PLUGIN_SDK` variable to point to the directory where you cloned
-this repository. By default, the `Makefile` expects it to be at the root directory of this
-plugin repository, by the `ethereum-plugin-sdk` name.
-
-This repository is deliberately **not** a submodule. You can see that the CI workflows
-clone and checkout either the latest `master` or on `develop` references. This ensures
-the code is compiled and tested on the latest version of the SDK.
-
-## Formatting
-
-The C source code is expected to be formatted with `clang-format` 11.0.0 or higher.
+To run plugin tests, do the following:
+1. Go through the [setup process](https://developers.ledger.com/docs/dapp/nano-plugin/environment-setup/)
+2. Clone repositories into `plugin_dev` directory created in the previous step. Execute the following commands in the new terminal window pointing to `plugin_dev`:
+```
+git clone https://github.com/euler-xyz/euler-ledger-app-plugin.git
+cd euler-ledger-app-plugin
+git clone https://github.com/LedgerHQ/ethereum-plugin-sdk
+```
+3. Install tests dependencies using terminal from step 2.:
+```
+cd tests && yarn install
+```
+4. Build the plugin and the Ethereum app. Go back to your docker setup from step 1. and execute the following in the container:
+```
+cd ../euler-ledger-app-plugin/tests
+./build_local_test_elfs.sh
+```
+5. Run tests. Use the terminal from step 2. and 3.
+```
+yarn test
+```

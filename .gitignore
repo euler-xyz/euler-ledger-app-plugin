@@ -22,3 +22,7 @@ __pycache__/
 tests/node_modules
 tests/lib
 tests/elfs
+
+# Custom
+.DS_Store
+ethereum-plugin-sdk/
