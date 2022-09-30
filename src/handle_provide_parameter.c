@@ -4,7 +4,9 @@ static bool handle_item(ethPluginProvideParameter_t *, context_t *);
 
 static bool pre_handle(context_t *context) {
     // check if the item length is aligned
-    if (context->item_length >= PARAMETER_LENGTH && context->item_length % PARAMETER_LENGTH == 0) return true;
+    if (context->item_length >= PARAMETER_LENGTH && context->item_length % PARAMETER_LENGTH == 0)
+        return true;
+        
     return false;
 }
 
@@ -22,21 +24,17 @@ static bool handle_activate_market(ethPluginProvideParameter_t *msg, context_t *
 
 static bool handle_enter_market(ethPluginProvideParameter_t *msg, context_t *context) {
     if (!pre_handle(context)) return true;
-    
+
     uint8_t word = context->item_length / PARAMETER_LENGTH;
     if (word == 2) {
-        context->sub_account_1 = (uint8_t)U2BE(msg->parameter, SELECTOR_SIZE / 2);
-        copy_address(
-            context->address_2, 
-            msg->parameter, 
-            sizeof(context->address_2) - SELECTOR_SIZE
-        );
+        context->sub_account_1 = (uint8_t) U2BE(msg->parameter, SELECTOR_SIZE / 2);
+        copy_address(context->address_2,
+                     msg->parameter,
+                     sizeof(context->address_2) - SELECTOR_SIZE);
     } else if (word == 1) {
-        copy_parameter(
-            context->address_2 + sizeof(context->address_2) - SELECTOR_SIZE,
-            msg->parameter, 
-            SELECTOR_SIZE
-        );
+        copy_parameter(context->address_2 + sizeof(context->address_2) - SELECTOR_SIZE,
+                       msg->parameter,
+                       SELECTOR_SIZE);
     }
 
     return post_handle(context);
@@ -48,21 +46,19 @@ static bool handle_exit_market(ethPluginProvideParameter_t *msg, context_t *cont
 
 static bool handle_use_permit(ethPluginProvideParameter_t *msg, context_t *context) {
     if (!pre_handle(context)) return true;
-    
+
     uint8_t tmp[SELECTOR_SIZE];
     memset(tmp, 0, SELECTOR_SIZE);
     if (memcmp(context->address_2, tmp, SELECTOR_SIZE) == 0) {
-        copy_address(
-            context->address_2, 
-            msg->parameter, 
-            sizeof(context->address_2) - SELECTOR_SIZE
-        );
-    } else if (memcmp(context->address_2 + sizeof(context->address_2) - SELECTOR_SIZE, tmp, SELECTOR_SIZE) == 0) {
-        copy_parameter(
-            context->address_2 + sizeof(context->address_2) - SELECTOR_SIZE,
-            msg->parameter, 
-            SELECTOR_SIZE
-        );
+        copy_address(context->address_2,
+                     msg->parameter,
+                     sizeof(context->address_2) - SELECTOR_SIZE);
+    } else if (memcmp(context->address_2 + sizeof(context->address_2) - SELECTOR_SIZE,
+                      tmp,
+                      SELECTOR_SIZE) == 0) {
+        copy_parameter(context->address_2 + sizeof(context->address_2) - SELECTOR_SIZE,
+                       msg->parameter,
+                       SELECTOR_SIZE);
     } else {
         return true;
     }
@@ -84,18 +80,14 @@ static bool handle_deposit(ethPluginProvideParameter_t *msg, context_t *context)
     uint8_t word = context->item_length / PARAMETER_LENGTH;
     if (word == 2) {
         memmove(context->address_2, context->address_1, sizeof(context->address_2));
-        context->sub_account_1 = (uint8_t)U2BE(msg->parameter, SELECTOR_SIZE / 2);
-        copy_parameter(
-            context->amount, 
-            msg->parameter + SELECTOR_SIZE,
-            sizeof(context->amount) - SELECTOR_SIZE
-        );
+        context->sub_account_1 = (uint8_t) U2BE(msg->parameter, SELECTOR_SIZE / 2);
+        copy_parameter(context->amount,
+                       msg->parameter + SELECTOR_SIZE,
+                       sizeof(context->amount) - SELECTOR_SIZE);
     } else if (word == 1) {
-        copy_parameter(
-            context->amount + sizeof(context->amount) - SELECTOR_SIZE,
-            msg->parameter, 
-            SELECTOR_SIZE
-        );
+        copy_parameter(context->amount + sizeof(context->amount) - SELECTOR_SIZE,
+                       msg->parameter,
+                       SELECTOR_SIZE);
     }
 
     return post_handle(context);
@@ -123,75 +115,55 @@ static bool handle_burn(ethPluginProvideParameter_t *msg, context_t *context) {
 
 static bool handle_transfer(ethPluginProvideParameter_t *msg, context_t *context) {
     if (!pre_handle(context)) return true;
-    
+
     uint8_t word = context->item_length / PARAMETER_LENGTH;
     if (word == 3) {
         memmove(context->address_2, context->address_1, sizeof(context->address_2));
-        copy_address(
-            context->address_3, 
-            msg->parameter, 
-            sizeof(context->address_3) - SELECTOR_SIZE
-        );
+        copy_address(context->address_3,
+                     msg->parameter,
+                     sizeof(context->address_3) - SELECTOR_SIZE);
     } else if (word == 2) {
-        copy_parameter(
-            context->address_3 + sizeof(context->address_3) - SELECTOR_SIZE,
-            msg->parameter, 
-            SELECTOR_SIZE
-        );
-        copy_parameter(
-            context->amount, 
-            msg->parameter + SELECTOR_SIZE, 
-            sizeof(context->amount) - SELECTOR_SIZE
-        );
+        copy_parameter(context->address_3 + sizeof(context->address_3) - SELECTOR_SIZE,
+                       msg->parameter,
+                       SELECTOR_SIZE);
+        copy_parameter(context->amount,
+                       msg->parameter + SELECTOR_SIZE,
+                       sizeof(context->amount) - SELECTOR_SIZE);
     } else if (word == 1) {
-        copy_parameter(
-            context->amount + sizeof(context->amount) - SELECTOR_SIZE,
-            msg->parameter, 
-            SELECTOR_SIZE
-        );
+        copy_parameter(context->amount + sizeof(context->amount) - SELECTOR_SIZE,
+                       msg->parameter,
+                       SELECTOR_SIZE);
     }
     return post_handle(context);
 }
 
 static bool handle_transfer_from(ethPluginProvideParameter_t *msg, context_t *context) {
     if (!pre_handle(context)) return true;
-    
+
     uint8_t word = context->item_length / PARAMETER_LENGTH;
     if (word == 4) {
         memmove(context->address_2, context->address_1, sizeof(context->address_2));
-        copy_address(
-            context->address_1, 
-            msg->parameter, 
-            sizeof(context->address_1) - SELECTOR_SIZE
-        );
+        copy_address(context->address_1,
+                     msg->parameter,
+                     sizeof(context->address_1) - SELECTOR_SIZE);
     } else if (word == 3) {
-        copy_parameter(
-            context->address_1 + sizeof(context->address_1) - SELECTOR_SIZE,
-            msg->parameter, 
-            SELECTOR_SIZE
-        );
-        copy_address(
-            context->address_3, 
-            msg->parameter, 
-            sizeof(context->address_3) - SELECTOR_SIZE
-        );
+        copy_parameter(context->address_1 + sizeof(context->address_1) - SELECTOR_SIZE,
+                       msg->parameter,
+                       SELECTOR_SIZE);
+        copy_address(context->address_3,
+                     msg->parameter,
+                     sizeof(context->address_3) - SELECTOR_SIZE);
     } else if (word == 2) {
-        copy_parameter(
-            context->address_3 + sizeof(context->address_3) - SELECTOR_SIZE,
-            msg->parameter, 
-            SELECTOR_SIZE
-        );
-        copy_parameter(
-            context->amount, 
-            msg->parameter + SELECTOR_SIZE, 
-            sizeof(context->amount) - SELECTOR_SIZE
-        );
+        copy_parameter(context->address_3 + sizeof(context->address_3) - SELECTOR_SIZE,
+                       msg->parameter,
+                       SELECTOR_SIZE);
+        copy_parameter(context->amount,
+                       msg->parameter + SELECTOR_SIZE,
+                       sizeof(context->amount) - SELECTOR_SIZE);
     } else if (word == 1) {
-        copy_parameter(
-            context->amount + sizeof(context->amount) - SELECTOR_SIZE,
-            msg->parameter, 
-            SELECTOR_SIZE
-        );
+        copy_parameter(context->amount + sizeof(context->amount) - SELECTOR_SIZE,
+                       msg->parameter,
+                       SELECTOR_SIZE);
     }
     return post_handle(context);
 }
@@ -201,63 +173,47 @@ static bool handle_swap(ethPluginProvideParameter_t *msg, context_t *context) {
 
     uint8_t word = context->item_length / PARAMETER_LENGTH;
     if (word == 12) {
-        context->sub_account_1 = (uint8_t)U2BE(msg->parameter, SELECTOR_SIZE / 2);
+        context->sub_account_1 = (uint8_t) U2BE(msg->parameter, SELECTOR_SIZE / 2);
     } else if (word == 11) {
-        context->sub_account_2 = (uint8_t)U2BE(msg->parameter, SELECTOR_SIZE / 2);
+        context->sub_account_2 = (uint8_t) U2BE(msg->parameter, SELECTOR_SIZE / 2);
     } else if (word == 9) {
-        copy_address(
-            context->address_2, 
-            msg->parameter, 
-            sizeof(context->address_2) - SELECTOR_SIZE
-        );
+        copy_address(context->address_2,
+                     msg->parameter,
+                     sizeof(context->address_2) - SELECTOR_SIZE);
     } else if (word == 8) {
-        copy_parameter(
-            context->address_2 + sizeof(context->address_2) - SELECTOR_SIZE,
-            msg->parameter, 
-            SELECTOR_SIZE
-        );
-        copy_address(
-            context->address_3, 
-            msg->parameter, 
-            sizeof(context->address_3) - SELECTOR_SIZE
-        );
+        copy_parameter(context->address_2 + sizeof(context->address_2) - SELECTOR_SIZE,
+                       msg->parameter,
+                       SELECTOR_SIZE);
+        copy_address(context->address_3,
+                     msg->parameter,
+                     sizeof(context->address_3) - SELECTOR_SIZE);
     } else if (word == 7) {
-        copy_parameter(
-            context->address_3 + sizeof(context->address_3) - SELECTOR_SIZE,
-            msg->parameter, 
-            SELECTOR_SIZE
-        );
+        copy_parameter(context->address_3 + sizeof(context->address_3) - SELECTOR_SIZE,
+                       msg->parameter,
+                       SELECTOR_SIZE);
     } else if (word == 6) {
-        context->swap_mode = (uint8_t)U2BE(msg->parameter, SELECTOR_SIZE / 2);
+        context->swap_mode = (uint8_t) U2BE(msg->parameter, SELECTOR_SIZE / 2);
 
         if (context->swap_mode != 0) {
-            copy_parameter(
-                context->amount, 
-                msg->parameter + SELECTOR_SIZE, 
-                sizeof(context->amount) - SELECTOR_SIZE
-            );
+            copy_parameter(context->amount,
+                           msg->parameter + SELECTOR_SIZE,
+                           sizeof(context->amount) - SELECTOR_SIZE);
         }
     } else if (word == 5) {
         if (context->swap_mode != 0) {
-            copy_parameter(
-                context->amount + sizeof(context->amount) - SELECTOR_SIZE,
-                msg->parameter, 
-                SELECTOR_SIZE
-            );
+            copy_parameter(context->amount + sizeof(context->amount) - SELECTOR_SIZE,
+                           msg->parameter,
+                           SELECTOR_SIZE);
         } else {
-            copy_parameter(
-                context->amount, 
-                msg->parameter + SELECTOR_SIZE, 
-                sizeof(context->amount) - SELECTOR_SIZE
-            );
+            copy_parameter(context->amount,
+                           msg->parameter + SELECTOR_SIZE,
+                           sizeof(context->amount) - SELECTOR_SIZE);
         }
     } else if (word == 4) {
         if (context->swap_mode == 0) {
-            copy_parameter(
-                context->amount + sizeof(context->amount) - SELECTOR_SIZE,
-                msg->parameter, 
-                SELECTOR_SIZE
-            );
+            copy_parameter(context->amount + sizeof(context->amount) - SELECTOR_SIZE,
+                           msg->parameter,
+                           SELECTOR_SIZE);
         }
     }
 
@@ -269,44 +225,32 @@ static bool handle_swap_and_repay(ethPluginProvideParameter_t *msg, context_t *c
 
     uint8_t word = context->item_length / PARAMETER_LENGTH;
     if (word == 13) {
-        context->sub_account_1 = (uint8_t)U2BE(msg->parameter, SELECTOR_SIZE / 2);
+        context->sub_account_1 = (uint8_t) U2BE(msg->parameter, SELECTOR_SIZE / 2);
     } else if (word == 12) {
-        context->sub_account_2 = (uint8_t)U2BE(msg->parameter, SELECTOR_SIZE / 2);
+        context->sub_account_2 = (uint8_t) U2BE(msg->parameter, SELECTOR_SIZE / 2);
     } else if (word == 9) {
-        copy_address(
-            context->address_2, 
-            msg->parameter, 
-            sizeof(context->address_2) - SELECTOR_SIZE
-        );
+        copy_address(context->address_2,
+                     msg->parameter,
+                     sizeof(context->address_2) - SELECTOR_SIZE);
     } else if (word == 8) {
-        copy_parameter(
-            context->address_2 + sizeof(context->address_2) - SELECTOR_SIZE,
-            msg->parameter, 
-            SELECTOR_SIZE
-        );
-        copy_address(
-            context->address_3, 
-            msg->parameter, 
-            sizeof(context->address_3) - SELECTOR_SIZE
-        );
+        copy_parameter(context->address_2 + sizeof(context->address_2) - SELECTOR_SIZE,
+                       msg->parameter,
+                       SELECTOR_SIZE);
+        copy_address(context->address_3,
+                     msg->parameter,
+                     sizeof(context->address_3) - SELECTOR_SIZE);
     } else if (word == 7) {
-        copy_parameter(
-            context->address_3 + sizeof(context->address_3) - SELECTOR_SIZE,
-            msg->parameter, 
-            SELECTOR_SIZE
-        );
+        copy_parameter(context->address_3 + sizeof(context->address_3) - SELECTOR_SIZE,
+                       msg->parameter,
+                       SELECTOR_SIZE);
     } else if (word == 6) {
-        copy_parameter(
-            context->amount, 
-            msg->parameter + SELECTOR_SIZE, 
-            sizeof(context->amount) - SELECTOR_SIZE
-        );
+        copy_parameter(context->amount,
+                       msg->parameter + SELECTOR_SIZE,
+                       sizeof(context->amount) - SELECTOR_SIZE);
     } else if (word == 5) {
-        copy_parameter(
-            context->amount + sizeof(context->amount) - SELECTOR_SIZE,
-            msg->parameter, 
-            SELECTOR_SIZE
-        );
+        copy_parameter(context->amount + sizeof(context->amount) - SELECTOR_SIZE,
+                       msg->parameter,
+                       SELECTOR_SIZE);
     }
 
     return post_handle(context);
@@ -333,14 +277,17 @@ static void handle_batch_dispatch(ethPluginProvideParameter_t *msg, context_t *c
             context->next_param = BATCH_DISPATCH_NUMBER_OF_ITEMS;
             break;
         case BATCH_DISPATCH_NUMBER_OF_ITEMS:
-            context->batch_dispatch_number_of_items = (uint8_t)U2BE(msg->parameter, PARAMETER_LENGTH - 2);
+            context->batch_dispatch_number_of_items =
+                (uint8_t) U2BE(msg->parameter, PARAMETER_LENGTH - 2);
             context->cnt = context->batch_dispatch_number_of_items;
             context->is_max_exceeded = false;
             context->next_param = BATCH_DISPATCH_ITEMS_OFFSETS;
             break;
         case BATCH_DISPATCH_ITEMS_OFFSETS:
             if (context->batch_dispatch_number_of_items == 1) {
-                context->offset = msg->parameterOffset - SELECTOR_SIZE + U2BE(msg->parameter, PARAMETER_LENGTH - 2) + BATCH_ITEM_PROXY_OFFSET;
+                context->offset = msg->parameterOffset - SELECTOR_SIZE +
+                                  U2BE(msg->parameter, PARAMETER_LENGTH - 2) +
+                                  BATCH_ITEM_PROXY_OFFSET;
                 context->go_to_offset = true;
                 context->next_param = BATCH_DISPATCH_ITEM_PROXY;
             } else {
@@ -350,7 +297,8 @@ static void handle_batch_dispatch(ethPluginProvideParameter_t *msg, context_t *c
 
                 uint8_t offset_index = context->batch_dispatch_number_of_items - context->cnt;
                 if (offset_index < MAX_ITEMS_IN_BATCH) {
-                    context->items_offsets[offset_index] = U2BE(msg->parameter, PARAMETER_LENGTH - 2);
+                    context->items_offsets[offset_index] =
+                        U2BE(msg->parameter, PARAMETER_LENGTH - 2);
                 } else {
                     context->is_max_exceeded = true;
                 }
@@ -358,7 +306,8 @@ static void handle_batch_dispatch(ethPluginProvideParameter_t *msg, context_t *c
                 context->cnt--;
                 if (context->cnt == 0) {
                     context->cnt = context->batch_dispatch_number_of_items;
-                    context->offset = msg->parameterOffset - SELECTOR_SIZE + PARAMETER_LENGTH + BATCH_ITEM_PROXY_OFFSET;
+                    context->offset = msg->parameterOffset - SELECTOR_SIZE + PARAMETER_LENGTH +
+                                      BATCH_ITEM_PROXY_OFFSET;
                     context->go_to_offset = true;
                     context->next_param = BATCH_DISPATCH_ITEM_PROXY;
                 }
@@ -381,7 +330,9 @@ static void handle_batch_dispatch(ethPluginProvideParameter_t *msg, context_t *c
                 if (context->cnt == 0 || offset_index >= MAX_ITEMS_IN_BATCH) {
                     context->next_param = UNEXPECTED_PARAMETER;
                 } else {
-                    context->offset = context->base_items_offset - SELECTOR_SIZE + context->items_offsets[offset_index] + BATCH_ITEM_PROXY_OFFSET;
+                    context->offset = context->base_items_offset - SELECTOR_SIZE +
+                                      context->items_offsets[offset_index] +
+                                      BATCH_ITEM_PROXY_OFFSET;
                     context->go_to_offset = true;
                     context->next_param = BATCH_DISPATCH_ITEM_PROXY;
                 }
@@ -469,18 +420,17 @@ static bool handle_item(ethPluginProvideParameter_t *msg, context_t *context) {
     }
 
     bool result = true;
-    if (
-        context->batch_dispatch_number_of_items == 1 && 
-        context->item_types[index] != UNEXPECTED_ITEM &&
-        context->item_length > SELECTOR_SIZE &&
-        context->item_handler != NULL
-    ) {
+    if (context->batch_dispatch_number_of_items == 1 &&
+        context->item_types[index] != UNEXPECTED_ITEM && context->item_length > SELECTOR_SIZE &&
+        context->item_handler != NULL) {
         // processing first word of the item
-        if (context->item_length >= PARAMETER_LENGTH && context->item_length % PARAMETER_LENGTH == SELECTOR_SIZE) {
+        if (context->item_length >= PARAMETER_LENGTH &&
+            context->item_length % PARAMETER_LENGTH == SELECTOR_SIZE) {
             context->item_length -= SELECTOR_SIZE;
             context->item_length += PARAMETER_LENGTH;
 
-            // assign hardcoded length as the swap payload will not be parsed (while having unknown length)
+            // assign hardcoded length as the swap payload will not be parsed (while having unknown
+            // length)
             if (context->item_selector == SWAP_SELECTOR) {
                 context->item_length = SWAP_ITEM_LENGTH_WITHOUT_PAYLOAD_ALIGNED;
             } else if (context->item_selector == SWAP_AND_REPAY_SELECTOR) {
@@ -489,7 +439,7 @@ static bool handle_item(ethPluginProvideParameter_t *msg, context_t *context) {
         }
 
         // execute the handler. if all data processed, expect the handler to return true
-        result = context->item_handler((uint8_t*) msg, (uint8_t*) context);
+        result = context->item_handler((uint8_t *) msg, (uint8_t *) context);
     }
 
     if (result) {

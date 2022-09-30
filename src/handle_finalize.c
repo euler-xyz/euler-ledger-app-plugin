@@ -49,7 +49,8 @@ void handle_finalize(void *parameters) {
                 if (context->is_max_exceeded) {
                     msg->numScreens = 1 + MAX_ITEMS_IN_BATCH / 2 + 1;
                 } else {
-                    msg->numScreens = 1 + context->batch_dispatch_number_of_items / 2 + context->batch_dispatch_number_of_items % 2;
+                    msg->numScreens = 1 + context->batch_dispatch_number_of_items / 2 +
+                                      context->batch_dispatch_number_of_items % 2;
                 }
             }
             break;
@@ -57,5 +58,5 @@ void handle_finalize(void *parameters) {
             PRINTF("Selector Index not supported: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;
             break;
-    } 
+    }
 }

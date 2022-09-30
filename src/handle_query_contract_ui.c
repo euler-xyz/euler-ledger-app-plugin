@@ -3,48 +3,48 @@
 /**
  * Ansi C "itoa" based on Kernighan & Ritchie's "Ansi C":
  */
-	
-void strreverse(char* begin, char* end) {
-	char aux;
-	while(end>begin) {
-        aux = *end; 
-        *end-- = *begin; 
+
+void strreverse(char *begin, char *end) {
+    char aux;
+    while (end > begin) {
+        aux = *end;
+        *end-- = *begin;
         *begin++ = aux;
     }
 }
-	
-void itoa(int value, char* str, int base) {
-	static char num[] = "0123456789abcdefghijklmnopqrstuvwxyz";
-	char* wstr=str;
-	int sign;
-	
-	// Validate base
-	if (base < 2 || base > 35) { 
-        *wstr = '\0'; 
-        return; 
+
+void itoa(int value, char *str, int base) {
+    static char num[] = "0123456789abcdefghijklmnopqrstuvwxyz";
+    char *wstr = str;
+    int sign;
+
+    // Validate base
+    if (base < 2 || base > 35) {
+        *wstr = '\0';
+        return;
     }
-	
-	// Take care of sign
-	if ((sign = value) < 0) {
+
+    // Take care of sign
+    if ((sign = value) < 0) {
         value = -value;
     }
-	
-	// Conversion. Number is reversed.
-	do {
+
+    // Conversion. Number is reversed.
+    do {
         *wstr++ = num[value % base];
     } while (value /= base);
 
-	if (sign < 0) {
+    if (sign < 0) {
         *wstr++ = '-';
     }
 
-	*wstr = '\0';
-	
-	// Reverse string
-	strreverse(str, wstr - 1);
+    *wstr = '\0';
+
+    // Reverse string
+    strreverse(str, wstr - 1);
 }
 
-static const char * item_type_to_string(selector_t type) {
+static const char *item_type_to_string(selector_t type) {
     switch (type) {
         case ACTIVATE_MARKET:
             return "Activate Market";
@@ -154,7 +154,10 @@ static void set_token_1_ui(ethQueryContractUI_t *msg, const context_t *context, 
         strlcat(msg->msg, context->ticker_1, msg->msgLength);
     } else {
         strlcpy(msg->msg, "0x", msg->msgLength);
-        getEthAddressStringFromBinary((uint8_t *)context->address_2, msg->msg + 2, msg->pluginSharedRW->sha3, 0);
+        getEthAddressStringFromBinary((uint8_t *) context->address_2,
+                                      msg->msg + 2,
+                                      msg->pluginSharedRW->sha3,
+                                      0);
     }
 }
 
@@ -165,23 +168,34 @@ static void set_token_2_ui(ethQueryContractUI_t *msg, const context_t *context, 
         strlcat(msg->msg, context->ticker_2, msg->msgLength);
     } else {
         strlcpy(msg->msg, "0x", msg->msgLength);
-        getEthAddressStringFromBinary((uint8_t *)context->address_3, msg->msg + 2, msg->pluginSharedRW->sha3, 0);
+        getEthAddressStringFromBinary((uint8_t *) context->address_3,
+                                      msg->msg + 2,
+                                      msg->pluginSharedRW->sha3,
+                                      0);
     }
 }
 
 static void set_address_3_ui(ethQueryContractUI_t *msg, const context_t *context, char *title) {
     strlcpy(msg->title, title, msg->titleLength);
     strlcpy(msg->msg, "0x", msg->msgLength);
-    getEthAddressStringFromBinary((uint8_t *)context->address_3, msg->msg + 2, msg->pluginSharedRW->sha3, 0);
+    getEthAddressStringFromBinary((uint8_t *) context->address_3,
+                                  msg->msg + 2,
+                                  msg->pluginSharedRW->sha3,
+                                  0);
 }
 
 static void set_address_1_ui(ethQueryContractUI_t *msg, const context_t *context, char *title) {
     strlcpy(msg->title, title, msg->titleLength);
     strlcpy(msg->msg, "0x", msg->msgLength);
-    getEthAddressStringFromBinary((uint8_t *)context->address_1, msg->msg + 2, msg->pluginSharedRW->sha3, 0);
+    getEthAddressStringFromBinary((uint8_t *) context->address_1,
+                                  msg->msg + 2,
+                                  msg->pluginSharedRW->sha3,
+                                  0);
 }
 
-static void set_sub_account_1_ui(ethQueryContractUI_t *msg, const context_t *context, char *prefix) {
+static void set_sub_account_1_ui(ethQueryContractUI_t *msg,
+                                 const context_t *context,
+                                 char *prefix) {
     char str[10];
     memset(str, 0, 10);
     itoa(context->sub_account_1, str, 10);
@@ -190,7 +204,9 @@ static void set_sub_account_1_ui(ethQueryContractUI_t *msg, const context_t *con
     strlcat(msg->msg, str, msg->msgLength);
 }
 
-static void set_sub_account_2_ui(ethQueryContractUI_t *msg, const context_t *context, char *prefix) {
+static void set_sub_account_2_ui(ethQueryContractUI_t *msg,
+                                 const context_t *context,
+                                 char *prefix) {
     char str[10];
     memset(str, 0, 10);
     itoa(context->sub_account_2, str, 10);
@@ -199,11 +215,13 @@ static void set_sub_account_2_ui(ethQueryContractUI_t *msg, const context_t *con
     strlcat(msg->title, str, msg->titleLength);
 }
 
-static void set_token_1_amount_ui(ethQueryContractUI_t *msg, const context_t *context, char *title) {
+static void set_token_1_amount_ui(ethQueryContractUI_t *msg,
+                                  const context_t *context,
+                                  char *title) {
     uint8_t max_amount[INT256_LENGTH];
     memset(max_amount, 0xff, INT256_LENGTH);
 
-    strlcpy(msg->title, title, msg->titleLength); 
+    strlcpy(msg->title, title, msg->titleLength);
     if (memcmp(context->amount, max_amount, sizeof(context->amount)) == 0) {
         strlcpy(msg->msg, "max", msg->msgLength);
     } else {
@@ -211,18 +229,19 @@ static void set_token_1_amount_ui(ethQueryContractUI_t *msg, const context_t *co
             context->amount,
             sizeof(context->amount),
             context->token_found_1 ? context->decimals_1 : 18,
-            context->token_found_1 ? "" : "", //"(?) ", // (?) might be even more confusing
+            context->token_found_1 ? "" : "",  //"(?) ", // (?) might be even more confusing
             msg->msg,
-            msg->msgLength
-        );
+            msg->msgLength);
     }
 }
 
-static void set_token_2_amount_ui(ethQueryContractUI_t *msg, const context_t *context, char *title) {
+static void set_token_2_amount_ui(ethQueryContractUI_t *msg,
+                                  const context_t *context,
+                                  char *title) {
     uint8_t max_amount[INT256_LENGTH];
     memset(max_amount, 0xff, INT256_LENGTH);
 
-    strlcpy(msg->title, title, msg->titleLength); 
+    strlcpy(msg->title, title, msg->titleLength);
     if (memcmp(context->amount, max_amount, sizeof(context->amount)) == 0) {
         strlcpy(msg->msg, "max", msg->msgLength);
     } else {
@@ -230,10 +249,9 @@ static void set_token_2_amount_ui(ethQueryContractUI_t *msg, const context_t *co
             context->amount,
             sizeof(context->amount),
             context->token_found_2 ? context->decimals_2 : 18,
-            context->token_found_2 ? "" : "", //"(?) ", // (?) might be even more confusing
+            context->token_found_2 ? "" : "",  //"(?) ", // (?) might be even more confusing
             msg->msg,
-            msg->msgLength
-        );
+            msg->msgLength);
     }
 }
 

@@ -17,34 +17,34 @@
 #define MAX_TICKER_LEN_OVERRIDE 7
 
 // Casts the handler appropriately
-#define HANDLER_CAST(handler) ((bool (*)(uint8_t*, uint8_t*))(handler))
+#define HANDLER_CAST(handler) ((bool (*)(uint8_t *, uint8_t *))(handler))
 
 // Standard offsets for EulerBatchItem to get proxy address and bytes length
-#define BATCH_ITEM_PROXY_OFFSET PARAMETER_LENGTH
+#define BATCH_ITEM_PROXY_OFFSET  PARAMETER_LENGTH
 #define BATCH_ITEM_LENGTH_OFFSET (PARAMETER_LENGTH * 2)
 
 // Auxiliary lengths for swap and swap and repay parsing
-#define SWAP_ITEM_LENGTH_WITHOUT_PAYLOAD_ALIGNED (13 * 32)
+#define SWAP_ITEM_LENGTH_WITHOUT_PAYLOAD_ALIGNED           (13 * 32)
 #define SWAP_AND_REPAY_ITEM_LENGTH_WITHOUT_PAYLOAD_ALIGNED (14 * 32)
 
 // List of selectors supported by this plugin.
-#define ACTIVATE_MARKET_SELECTOR ((uint32_t) 0x4e807177)
-#define BATCH_DISPATCH_SELECTOR ((uint32_t) 0xeb937aeb)
-#define ENTER_MARKET_SELECTOR ((uint32_t) 0x73f0b437)
-#define EXIT_MARKET_SELECTOR ((uint32_t) 0xc8a5fba3)
-#define USE_PERMIT_SELECTOR ((uint32_t) 0xa3e02273)
+#define ACTIVATE_MARKET_SELECTOR    ((uint32_t) 0x4e807177)
+#define BATCH_DISPATCH_SELECTOR     ((uint32_t) 0xeb937aeb)
+#define ENTER_MARKET_SELECTOR       ((uint32_t) 0x73f0b437)
+#define EXIT_MARKET_SELECTOR        ((uint32_t) 0xc8a5fba3)
+#define USE_PERMIT_SELECTOR         ((uint32_t) 0xa3e02273)
 #define USE_PERMIT_ALLOWED_SELECTOR ((uint32_t) 0x0f5621e7)
-#define USE_PERMIT_PACKED_SELECTOR ((uint32_t) 0xbf143b34)
-#define DEPOSIT_SELECTOR ((uint32_t) 0xe2bbb158)
-#define WITHDRAW_SELECTOR ((uint32_t) 0x441a3e70)
-#define BORROW_SELECTOR ((uint32_t) 0x0ecbcdab)
-#define REPAY_SELECTOR ((uint32_t) 0xd8aed145)
-#define MINT_SELECTOR ((uint32_t) 0x1b2ef1ca)
-#define BURN_SELECTOR ((uint32_t) 0xb390c0ab)
-#define TRANSFER_SELECTOR ((uint32_t) 0xa9059cbb)
-#define TRANSFER_FROM_SELECTOR ((uint32_t) 0x23b872dd)
-#define SWAP_SELECTOR ((uint32_t) 0x25cad427)
-#define SWAP_AND_REPAY_SELECTOR ((uint32_t) 0xb0257235)
+#define USE_PERMIT_PACKED_SELECTOR  ((uint32_t) 0xbf143b34)
+#define DEPOSIT_SELECTOR            ((uint32_t) 0xe2bbb158)
+#define WITHDRAW_SELECTOR           ((uint32_t) 0x441a3e70)
+#define BORROW_SELECTOR             ((uint32_t) 0x0ecbcdab)
+#define REPAY_SELECTOR              ((uint32_t) 0xd8aed145)
+#define MINT_SELECTOR               ((uint32_t) 0x1b2ef1ca)
+#define BURN_SELECTOR               ((uint32_t) 0xb390c0ab)
+#define TRANSFER_SELECTOR           ((uint32_t) 0xa9059cbb)
+#define TRANSFER_FROM_SELECTOR      ((uint32_t) 0x23b872dd)
+#define SWAP_SELECTOR               ((uint32_t) 0x25cad427)
+#define SWAP_AND_REPAY_SELECTOR     ((uint32_t) 0xb0257235)
 
 // Enumeration of the different selectors possible.
 // Should follow the exact same order as the array declared in main.c
@@ -114,7 +114,7 @@ typedef struct context_t {
     uint16_t items_offsets[MAX_ITEMS_IN_BATCH];
     uint16_t item_length;
     uint32_t item_selector;
-    bool (*item_handler)(uint8_t*, uint8_t*);
+    bool (*item_handler)(uint8_t *, uint8_t *);
 
     // For both parsing and display.
     selector_t selectorIndex;

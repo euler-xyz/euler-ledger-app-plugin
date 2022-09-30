@@ -24,25 +24,23 @@
 
 #include "euler_plugin.h"
 
-const uint32_t EULER_SELECTORS[NUM_SELECTORS] = {
-    ACTIVATE_MARKET_SELECTOR,
-    BATCH_DISPATCH_SELECTOR,
-    ENTER_MARKET_SELECTOR,
-    EXIT_MARKET_SELECTOR,
-    USE_PERMIT_SELECTOR,
-    USE_PERMIT_ALLOWED_SELECTOR,
-    USE_PERMIT_PACKED_SELECTOR,
-    DEPOSIT_SELECTOR,
-    WITHDRAW_SELECTOR,
-    BORROW_SELECTOR,
-    REPAY_SELECTOR,
-    MINT_SELECTOR,
-    BURN_SELECTOR,
-    TRANSFER_SELECTOR,
-    TRANSFER_FROM_SELECTOR,
-    SWAP_SELECTOR,
-    SWAP_AND_REPAY_SELECTOR
-};
+const uint32_t EULER_SELECTORS[NUM_SELECTORS] = {ACTIVATE_MARKET_SELECTOR,
+                                                 BATCH_DISPATCH_SELECTOR,
+                                                 ENTER_MARKET_SELECTOR,
+                                                 EXIT_MARKET_SELECTOR,
+                                                 USE_PERMIT_SELECTOR,
+                                                 USE_PERMIT_ALLOWED_SELECTOR,
+                                                 USE_PERMIT_PACKED_SELECTOR,
+                                                 DEPOSIT_SELECTOR,
+                                                 WITHDRAW_SELECTOR,
+                                                 BORROW_SELECTOR,
+                                                 REPAY_SELECTOR,
+                                                 MINT_SELECTOR,
+                                                 BURN_SELECTOR,
+                                                 TRANSFER_SELECTOR,
+                                                 TRANSFER_FROM_SELECTOR,
+                                                 SWAP_SELECTOR,
+                                                 SWAP_AND_REPAY_SELECTOR};
 
 // Function to dispatch calls from the ethereum app.
 void dispatch_plugin_calls(int message, void *parameters) {
